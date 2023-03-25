@@ -3,7 +3,7 @@ import { BaseEntity } from "./base.entity";
 import bycrpt from 'bcrypt'
 
 @Entity('users')
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
     @Column()
     f_name: string
     @Column()
