@@ -1,6 +1,6 @@
 import { BeforeInsert, Column, Entity } from "typeorm";
 import { BaseEntity } from "./base.entity";
-import bycrpt from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -8,23 +8,29 @@ export class UserEntity extends BaseEntity {
     f_name: string
     @Column()
     l_name: string
-    @Column()
+    @Column({
+        unique : true
+    })
     email: string
     @Column()
     password: string
-    @Column()
+    @Column({
+        nullable : true
+    })
     address: string
-    @Column()
+    @Column({
+        nullable : true
+    })
     phone: string
     // @Column()
     // photo: string
 
     @BeforeInsert()
     async hashPassword() {
-        this.password = await bycrpt.hash(this.password, 12)
+        this.password = await bcrypt.hash(this.password, 12)
     }
 
     static async comparePassword(candidatePass: string, hashedPass: string) {
-        return await bycrpt.compare(candidatePass, hashedPass);
+        return await bcrypt.compare(candidatePass, hashedPass);
     }
 }
