@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Next, Post, Request as REQ, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Next, Post, Req, Request as REQ, UsePipes, ValidationPipe } from '@nestjs/common';
 import { NextFunction, Request } from 'express';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { UserService } from './user.service';
@@ -11,12 +11,12 @@ export class UserController {
 
     @Post('create')
     @UsePipes(new ValidationPipe({ transform: true }))
-    async createNewUser(@Body() createUser: CreateUserDto, @Next() next: NextFunction) {
-        try {
-            return await this.userService.createNewUser(createUser)
-        } catch (error) {
-            next(error)
-        }
+    async createNewUser(@Body() createUser: CreateUserDto) {
+        return await this.userService.createNewUser(createUser)
+    }
+    @Post('login')
+    async loginUser(@Req() req: Request) {
+        return this.userService.loginUser(req.body)
     }
 
 }

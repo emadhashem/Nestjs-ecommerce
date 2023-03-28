@@ -26,4 +26,12 @@ export class UserService {
     async findUserByEmail(email: string) {
         return await this.userRepo.findOneBy({ email })
     }
+    async loginUser(userData: any) {
+        const findUser = await this.findUserByEmail(userData.email)
+        if (!findUser || !await UserEntity.comparePassword(userData.password, findUser.password)) {
+            throw new HttpException('User not found', HttpStatus.BAD_REQUEST)
+        }
+        const {password , ...rest} = findUser
+        return rest ;
+    }
 }
