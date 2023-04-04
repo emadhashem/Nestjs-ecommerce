@@ -3,7 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+
 
 import databaseConfig from './utils/database.config';
 
@@ -12,7 +13,7 @@ import databaseConfig from './utils/database.config';
     envFilePath: '.env'
   }),
   TypeOrmModule.forRoot(databaseConfig()),
-    UserModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -13,7 +13,10 @@ export class User extends BaseEntity {
 
     @Column()
     user_name: string
-    @Column()
+    
+    @Column({
+        unique : true
+    })
     email: string
 
     @Column()
