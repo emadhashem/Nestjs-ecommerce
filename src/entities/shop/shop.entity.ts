@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "../base.entity";
 import { Product } from "../product/product.entity";
 import { User } from "../user/user.entity";
@@ -6,7 +6,10 @@ import { User } from "../user/user.entity";
 @Entity('shops')
 export class Shop extends BaseEntity {
 
-    @Column()
+    @Column({
+        unique : true
+    })
+    @Index('shop_name_index')
     shop_name: string
 
     @Column()

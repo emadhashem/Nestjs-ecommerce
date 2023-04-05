@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { AccessToken } from "src/entities/access_token/accessToken.entity";
 import { Cart } from "src/entities/cart/cart.entity";
 import { CartItem } from "src/entities/cart/cartItem.entity";
 import { Category } from "src/entities/category/category.entity";
@@ -24,7 +25,8 @@ export default (): TypeOrmModuleOptions => (
         entities: [User, Shop, Category,
             Product, ProductImg, Order,
             OrderItem, Cart, CartItem,
-            Payment, Review, Notification
+            Payment, Review, Notification,
+            AccessToken
         ]
     }
 )

@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 
 import { SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { AuthRepository } from './auth.repository';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
@@ -11,7 +12,8 @@ export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly jwtService: JwtService, private reflector: Reflector
+    private readonly jwtService: JwtService, private reflector: Reflector,
+    private readonly authrepo: AuthRepository
   ) { }
   async canActivate(
     context: ExecutionContext,
@@ -21,7 +23,6 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
     if (isPublic) {
-      // 💡 See this condition
       return true;
     }
     const req = context.switchToHttp().getRequest<Request>()
@@ -31,9 +32,11 @@ export class AuthGuard implements CanActivate {
 
       throw new UnauthorizedException('Please login ');
     }
+    const findTK = await this.authrepo.findToken(token)
+    if (findTK) throw new UnauthorizedException('U are Not authrized ,Please login ');
     try {
       const { sub } = await this.jwtService.verifyAsync(token)
-      req['user'] = sub
+      req['user'] = { user: sub, token }
     } catch (error) {
       throw new UnauthorizedException('Your session id ended');
     }

@@ -7,6 +7,7 @@ import { Cart } from "../cart/cart.entity";
 import { Payment } from "../payment/payment.entity";
 import { Review } from "../review/review.entity";
 import { Notification } from "../notification/notification.entity";
+import { Exclude } from "class-transformer";
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -19,6 +20,7 @@ export class User extends BaseEntity {
     })
     email: string
 
+    @Exclude()
     @Column()
     password: string
 

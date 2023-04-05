@@ -5,12 +5,13 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/createUser.dto';
 
 @Injectable()
-export class UserRepositoryService {
+export class UserRepository {
     constructor(
         @InjectRepository(User)
-        private readonly userRepo: Repository<User>
+        private readonly userRepo: Repository<User>,
+    
     ) { }
-    async createNewUser(createUserDto : CreateUserDto) {
+    async createNewUser(createUserDto: CreateUserDto) {
         const newUser = this.userRepo.create()
         newUser.user_name = createUserDto.userName
         newUser.password = createUserDto.password
@@ -18,14 +19,17 @@ export class UserRepositoryService {
         return await this.userRepo.save(newUser)
     }
 
-    async findUserByEmail(email : string) {
-        return await this.userRepo.findOne({
-            where : {
-                email
-            }
-        })
+    async findUserByEmail(email: string) {
+        const res =  await this.userRepo.createQueryBuilder()
+        .select('*')
+        .from(User , 'user')
+        .where('user.email = :_email' , {_email : email})
+        .execute()
+        return res[0]
     }
-    async validateUserPassword(candidatepass : string, hash : string) {
-        return await User.comparePassword(candidatepass , hash)
-    }
+    async validateUserPassword(candidatepass: string, hash: string) {
+        return await User.comparePassword(candidatepass, hash)
+    } 
+
+
 }
