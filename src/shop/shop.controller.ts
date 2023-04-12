@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Req, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Req, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Request } from 'express';
 import { CreateShopDto } from './dtos/createShop.dto';
+import { UpdateShopDto } from './dtos/updateShop.dto';
 import { ShopService } from './shop.service';
 
 @Controller('shop')
@@ -17,7 +18,15 @@ export class ShopController {
     }
 
     @Get('my_shops')
-    async getAllUserShops(@Req() req: Request) {
+    getAllUserShops(@Req() req: Request) {
         return this.shopService.getAllUserShops(req['user'].user.id)
     }
+
+    @Put('/update')
+    @UsePipes(ValidationPipe)
+    updateShop(@Body() updateshopDto: UpdateShopDto, @Req() req: Request) {
+        return this.shopService.updateShop({...updateshopDto, user_id : req['user'].user.id});
+    }
+
+
 }

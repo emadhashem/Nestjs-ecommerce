@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, Injectable } from '@nestjs/comm
 import { UserRepository } from 'src/user/user.repository';
 import { QueryFailedError } from 'typeorm';
 import { CreateShopDto } from './dtos/createShop.dto';
+import { UpdateShopDto } from './dtos/updateShop.dto';
 import { ShopRepository } from './shop.repository';
 
 @Injectable()
@@ -26,5 +27,10 @@ export class ShopService {
     }
     async getAllUserShops(userId: string) {
         return await this.shopRepo.getShopsByUserId(userId)
+    }
+    async updateShop(updateshopDto: UpdateShopDto) {
+        const findShop = await this.shopRepo.findShopByName(updateshopDto.name, updateshopDto.user_id)
+        if (!findShop) throw new BadRequestException('Shop Not Found!.')
+        return await this.shopRepo.updateShop(updateshopDto, findShop)
     }
 }

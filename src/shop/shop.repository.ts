@@ -4,6 +4,7 @@ import { Shop } from "src/entities/shop/shop.entity";
 import { User } from "src/entities/user/user.entity";
 import { Repository } from "typeorm";
 import { CreateShopDto } from "./dtos/createShop.dto";
+import { UpdateShopDto } from "./dtos/updateShop.dto";
 
 
 @Injectable()
@@ -36,5 +37,18 @@ export class ShopRepository {
             .where('shop.shop_owner_id = :id', { id: userId })
             .getMany()
         return res
+    }
+
+    async findShopByName(name: string, user_id: string) {
+        return await this.shopRepo.createQueryBuilder('shop')
+            .where('shop.shop_owner_id = :user_id AND shop.shop_name = :name', { name, user_id })
+            .getOne()
+    }
+    async updateShop(updateShopDto: UpdateShopDto, shop: Shop) {
+        shop.shop_name = updateShopDto.name
+        shop.shop_address = updateShopDto.address
+        shop.shop_description = updateShopDto.description
+        shop.shop_phone_number = updateShopDto.phone
+        return await this.shopRepo.save(shop)
     }
 }
