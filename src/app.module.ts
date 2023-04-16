@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CronModule } from './cron/cron.module';
 import { ShopModule } from './shop/shop.module';
+import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
 
 
 import databaseConfig from './utils/database.config';
@@ -19,7 +21,9 @@ import databaseConfig from './utils/database.config';
   TypeOrmModule.forRoot(databaseConfig()),
     AuthModule,
     CronModule,
-    ShopModule
+    ShopModule,
+    ProductModule,
+    CategoryModule
   ],
   controllers: [AppController],
   providers: [AppService],
