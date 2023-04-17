@@ -9,7 +9,9 @@ import { ProductImg } from "../_imgs/product_img.entity";
 @Entity('products')
 export class Product extends BaseEntity {
 
-    @Column()
+    @Column({
+        unique : true
+    })
     product_name: string
 
     @Column()
@@ -39,5 +41,4 @@ export class Product extends BaseEntity {
 
     @OneToMany(() => ProductImg, p_imgs => p_imgs.product)
     product_imgs: ProductImg[]
-
 }

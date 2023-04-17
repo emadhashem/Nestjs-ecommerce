@@ -19,4 +19,11 @@ export class CategoryRepository {
             throw new ConflictException('Name must be unique')
         }
     }
+
+    async findCategotyByName(name : string) {
+        return await this.categoryRepo.createQueryBuilder('cate')
+        .select('cate.category_name')
+        .where('cate.category_name = :name' , {name})
+        .getOne()
+    }
 }
