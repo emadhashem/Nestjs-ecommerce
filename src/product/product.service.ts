@@ -20,4 +20,8 @@ export class ProductService {
 
         return await this.productRepo.create(createPorductDto, category, shop)
     }
+
+    async delete(id: string) {
+        return await this.productRepo.delete(id)
+    }
 }

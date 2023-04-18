@@ -5,7 +5,7 @@ import { Product } from "../product/product.entity";
 @Entity('product_imgs')
 export class ProductImg extends BaseEntity {
 
-    @ManyToOne(() => Product, product => product.product_imgs)
+    @ManyToOne(() => Product, product => product.product_imgs, {onDelete : 'CASCADE'})
     @JoinColumn({
         name: 'product_id'
     })

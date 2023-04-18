@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/category/category.entity';
 import { Product } from 'src/entities/product/product.entity';
@@ -22,12 +22,25 @@ export class ProductRepository {
                     product_price: createPorductDto.price,
                     shop: shop,
                     category: category,
-                    product_stock_quantity : createPorductDto.stock_quantity
+                    product_stock_quantity: createPorductDto.stock_quantity
                 }
             )
             return await this.productRepo.save(newProduct)
         } catch (error) {
             throw new ConflictException('Porduct name must be uniqe')
+        }
+    }
+    async delete(id: string) {
+        try {
+            return await this.productRepo
+                .createQueryBuilder('product')
+                .delete()
+                .from(Product)
+                .where("id = :id", { id })
+                .execute()
+
+        } catch (error) {
+            throw new BadRequestException(error)
         }
     }
 }
