@@ -17,7 +17,7 @@ export class ProductRepository {
         try {
             const newProduct = this.productRepo.create(
                 {
-                    product_name: createPorductDto.category_name,
+                    product_name: createPorductDto.name,
                     product_description: createPorductDto.description,
                     product_price: createPorductDto.price,
                     shop: shop,

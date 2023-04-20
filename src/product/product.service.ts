@@ -13,7 +13,7 @@ export class ProductService {
     ) { }
 
     async create(createPorductDto: CreatePorductDto, user_id: string) {
-        const shop = await this.shopRepo.findShopByName(createPorductDto.shop_name, user_id)
+        const shop = await this.shopRepo.findShopByName(createPorductDto.name, user_id)
         if (!shop) throw new BadRequestException('Shop not found')
         const category = await this.categoryRepo.findCategotyByName(createPorductDto.category_name)
         if (!category) throw new BadRequestException('Category not found')

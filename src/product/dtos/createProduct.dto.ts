@@ -7,9 +7,6 @@ export class CreatePorductDto {
     name: string
 
     @IsString()
-    shop_name: string
-
-    @IsString()
     category_name: string
 
     @IsString()

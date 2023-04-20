@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Param, Post, Req, UsePipes, ValidationPipe, Put } from '@nestjs/common';
 import { Request } from 'express';
 import { CreatePorductDto } from './dtos/createProduct.dto';
+import { UpdateProductDto } from './dtos/updateProduct.dto';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -21,9 +22,9 @@ export class ProductController {
         return this.productService.delete(id)
     }
 
+    @UsePipes(ValidationPipe)
     @Put('update/:id')
-    updateDetails(@Param('id') id: string) {
-        return id
-
+    updateDetails(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+        return updateProductDto
     }
 }
