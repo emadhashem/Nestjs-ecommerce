@@ -4,14 +4,15 @@ import { UserService } from './user.service';
 
 describe('UserController', () => {
   let controller: UserController;
-  const mockUserService = {
-
-  }
+  const mockUserService = {};
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
-      providers : [UserService]
-    }).overrideProvider(UserService).useValue(mockUserService).compile()
+      providers: [UserService],
+    })
+      .overrideProvider(UserService)
+      .useValue(mockUserService)
+      .compile();
 
     controller = module.get<UserController>(UserController);
   });
@@ -19,7 +20,7 @@ describe('UserController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-  it('should create new user' , () => {
-    expect(controller.createNewUser()).toEqual(undefined)
-  })
+  it('should create new user', () => {
+    expect(controller.createNewUser()).toEqual(undefined);
+  });
 });
