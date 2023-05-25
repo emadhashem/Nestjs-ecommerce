@@ -1,6 +1,8 @@
 import {
+  Body,
   Controller,
   Post,
+  Put,
   Req,
   UsePipes,
   ValidationPipe,
@@ -8,6 +10,7 @@ import {
 import { CreateShopDto } from './dto/CreateShop.dto';
 import { ShopService } from './shop.service';
 import { Request } from 'express';
+import { UpdateShopDto } from './dto/UpdateShop.dto';
 
 @Controller('shop')
 export class ShopController {
@@ -15,7 +18,21 @@ export class ShopController {
 
   @UsePipes(ValidationPipe)
   @Post('/create-shop')
-  createShop(createShopDto: CreateShopDto, @Req() req: Request) {
-    return this.shopService.createShop(createShopDto, req['user'].id);
+  async createShop(@Body() createShopDto: CreateShopDto, @Req() req: Request) {
+    await this.shopService.createShop(createShopDto, req['user'].id);
+    return {
+      message : 'success'
+    }
+  }
+
+  @UsePipes(ValidationPipe)
+  @Put('/update-shop')
+  async updateShop(@Body() updateShopDto : UpdateShopDto, @Req() req: Request) {
+    await this.shopService.updateShop(updateShopDto, req['user'].id)
+    return {
+      message : 'success'
+    }
+
   }
 }
+

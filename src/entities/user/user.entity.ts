@@ -36,7 +36,7 @@ export class User extends BaseEntity {
   })
   photo: string;
 
-  @OneToMany(() => Shop, (shop) => shop.shop_owner)
+  @OneToMany(() => Shop, (shop) => shop.shop_owner, {onDelete : 'CASCADE'})
   shops: Shop[];
 
   @OneToMany(() => Order, (order) => order.user)
