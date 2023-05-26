@@ -34,13 +34,41 @@ export class ShopService {
   async updateShop(updateShopDto: UpdateShopDto, ownerId: string) {
     
     try {
-      let curShop = await this.shopRepo.getShopByNameOrId("id" , updateShopDto.id , ownerId)
+      let curShop = await this.shopRepo.getShopByNameOrIdAndOwner("id" , updateShopDto.id , ownerId)
       if(!curShop) throw new NotFoundException('Shop not found.')
       return await this.shopRepo.updateShop(updateShopDto)
     } catch (error) {
       if (error.message.includes('Duplicate')) throw new ConflictException('New Shop name used.')
       throw error;
     }
+  }
+
+  async deleteShop(shopId : string , ownerId : string) {
+    try {
+      await this.shopRepo.deleteShop(shopId , ownerId)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getAllShopsByFilters( skip : string, limit : string , shop_name?: string, shop_address? : string) {
+    try {
+      return await this.shopRepo.getAllShopsByFilters(skip, limit , shop_name , shop_address)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async searchShop(skip  :string , limit : string , text : string) {
+    return await this.shopRepo.shopSearch(skip , limit , text);
+  }
+
+  async getShopDetails(shopId : string) {
+    return await this.shopRepo.getShopById(shopId)
+  }
+
+  async getMyShops(ownerId : string) {
+    return await this.shopRepo.getUserShops(ownerId)
   }
 }
 

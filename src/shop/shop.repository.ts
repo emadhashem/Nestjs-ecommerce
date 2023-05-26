@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Shop } from 'src/entities/shop/shop.entity';
-import { NoVersionOrUpdateDateColumnError, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateShopDto } from './dto/CreateShop.dto';
 import { User } from 'src/entities/user/user.entity';
 import { UpdateShopDto } from './dto/UpdateShop.dto';
@@ -31,7 +31,7 @@ export class ShopRepository {
       .execute();
   }
 
-  async getShopByNameOrId(key: 'shop_name' | 'id', value: string, ownerId: string)
+  async getShopByNameOrIdAndOwner(key: 'shop_name' | 'id', value: string, ownerId: string)
     : Promise<Shop> {
     if (key === 'id') {
       return await this.shopDbRepo.createQueryBuilder('shop')
@@ -43,6 +43,12 @@ export class ShopRepository {
       .getOne()
   }
 
+  async getShopById(id : string) {
+    return await this.shopDbRepo.createQueryBuilder('shop')
+      .where('shop.id = :id', { id })
+      .getOne()
+  }
+
   async updateShop(updateShopDto: UpdateShopDto) {
     const reult =  await this.shopDbRepo.update({
       id : updateShopDto.id
@@ -50,6 +56,43 @@ export class ShopRepository {
       ...updateShopDto
     })
     if(reult.affected === 0) throw new BadRequestException('Update fail.')
+  }
+
+  async deleteShop(shopId : string , ownerId : string) {
+    const result = await this.shopDbRepo
+      .createQueryBuilder()
+      .delete()
+      .where('id = :id AND shop_owner_id = :ownerId' , {id : shopId, ownerId})
+      .execute()
+      if(result.affected === 0) throw new BadRequestException('Delte fail.')
+  }
+
+  async getAllShopsByFilters(skip : string, limit : string , shop_name?: string, shop_address? : string) {
+    const qb = this.shopDbRepo.createQueryBuilder()
+
+    if(shop_name) {
+      qb.andWhere('shop_name LIKE :name' , {name : `%${shop_name}%`})
+    }
+
+    if(shop_address) {
+      qb.andWhere('shop_address LIKE :address' , {address : `%${shop_address}%`})
+    }
+    const shops = await qb.skip(Number(skip)).take(Number(limit)).getMany()
+    return shops
+  }
+
+  async shopSearch(skip : string, limit : string, searchText : string) {
+    const qb = this.shopDbRepo.createQueryBuilder('shop')
+
+    qb.orWhere('shop_name LIKE :text' , {text : `%${searchText}%`})
+    .orWhere('shop_address LIKE :text' , {text : `%${searchText}%`})
+    .orWhere('shop_description LIKE :text' , {text : `%${searchText}%`})
+
+    const shops = await qb
+    .skip(Number(skip)).take(Number(limit)).execute()
+
+    return shops
     
   }
+  
 }
