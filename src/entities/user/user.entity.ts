@@ -7,6 +7,7 @@ import { Cart } from '../cart/cart.entity';
 import { Payment } from '../payment/payment.entity';
 import { Review } from '../review/review.entity';
 import { Notification } from '../notification/notification.entity';
+import { UserRoles } from './user-types';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -35,6 +36,13 @@ export class User extends BaseEntity {
     nullable: true,
   })
   photo: string;
+
+  @Column({
+    type : 'enum',
+    enum : UserRoles,
+    default : UserRoles.user
+  })
+  role : string 
 
   @OneToMany(() => Shop, (shop) => shop.shop_owner, {onDelete : 'CASCADE'})
   shops: Shop[];

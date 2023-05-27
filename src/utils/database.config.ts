@@ -10,7 +10,7 @@ import { Product } from 'src/entities/product/product.entity';
 import { Review } from 'src/entities/review/review.entity';
 import { Shop } from 'src/entities/shop/shop.entity';
 import { User } from 'src/entities/user/user.entity';
-import { ProductImg } from 'src/entities/_imgs/product_img.entity';
+import { FileEntity } from 'src/entities/_imgs/file.entity';
 
 export default (): TypeOrmModuleOptions => ({
   type: 'mysql',
@@ -25,7 +25,7 @@ export default (): TypeOrmModuleOptions => ({
     Shop,
     Category,
     Product,
-    ProductImg,
+    FileEntity,
     Order,
     OrderItem,
     Cart,

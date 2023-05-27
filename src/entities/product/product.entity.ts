@@ -3,7 +3,7 @@ import { BaseEntity } from '../base.entity';
 import { Category } from '../category/category.entity';
 import { Review } from '../review/review.entity';
 import { Shop } from '../shop/shop.entity';
-import { ProductImg } from '../_imgs/product_img.entity';
+import { FileEntity } from '../_imgs/file.entity';
 
 @Entity('products')
 export class Product extends BaseEntity {
@@ -34,6 +34,6 @@ export class Product extends BaseEntity {
   @OneToMany(() => Review, (review) => review.product)
   reviews: Review[];
 
-  @OneToMany(() => ProductImg, (p_imgs) => p_imgs.product)
-  product_imgs: ProductImg[];
+  @OneToMany(() => FileEntity, (files) => files.product)
+  files: FileEntity[];
 }
