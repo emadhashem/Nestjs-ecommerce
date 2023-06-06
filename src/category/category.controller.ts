@@ -20,7 +20,7 @@ export class CategoryController {
     }
 
     @Get('/get-all-category')
-    async getAllcategory() {
+    async getAllCategory() {
         return await this.categoryService.getAllCategory()
     }
 }
